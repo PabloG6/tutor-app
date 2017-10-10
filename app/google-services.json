@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "900644968942",
+    "firebase_url": "https://tutor-app-be790.firebaseio.com",
+    "project_id": "tutor-app-be790",
+    "storage_bucket": "tutor-app-be790.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:900644968942:android:e20c23f0d9abdad4",
+        "android_client_info": {
+          "package_name": "com.momocorp.charihelp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "900644968942-19r5e68kqmf999d312gvolc94v6qv0ks.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDlf-27eeE8azZj4cr_uYX22h5mNp3F3A"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
