@@ -22,12 +22,13 @@ class User {
         this.first_name = firstName;
         this.last_name = lastName;
         this.uid = uid;
+
     }
 
     public static class Appointments extends User {
         public Appointments()
         {
-            this.name = first_name + " "+ last_name;
+            this.name = first_name +" "+ last_name;
 
         }
         String name;

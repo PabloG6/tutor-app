@@ -13,7 +13,7 @@ android {
 
 
         jackOptions {
-            enabled = true
+            enabled = false
         }
     }
     buildTypes {
@@ -24,8 +24,8 @@ android {
     }
 
     compileOptions {
-        targetCompatibility 1.8
-        sourceCompatibility 1.8
+        targetCompatibility 1.7
+        sourceCompatibility 1.7
     }
 }
 

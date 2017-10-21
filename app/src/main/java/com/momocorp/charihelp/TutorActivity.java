@@ -10,10 +10,15 @@ public class TutorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor);
-        tutorRecyclerView = findViewById(R.id.tutor_recycler);
+        tutorRecyclerView = (RecyclerView) findViewById(R.id.tutor_recycler);
         UserAdapter userAdapter = new UserAdapter();
         tutorRecyclerView.setAdapter(userAdapter);
 
         //create recyclerview for tutor
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

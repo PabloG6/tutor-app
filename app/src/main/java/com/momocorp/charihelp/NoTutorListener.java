@@ -6,4 +6,6 @@ package com.momocorp.charihelp;
 
 interface NoTutorListener {
     void showNoTutor();
+
+    void showTutor();
 }
