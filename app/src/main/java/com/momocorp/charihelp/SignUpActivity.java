@@ -109,7 +109,7 @@ public class SignUpActivity extends AppCompatActivity {
                         public void onFailure(@NonNull Exception e) {
                             {
                                 progressBar.setVisibility(View.INVISIBLE);
-                                Toast.makeText(SignUpActivity.this, "Sign Up Failed", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SignUpActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
 
                                 Log.i("ERROR", e.getMessage());
                             }

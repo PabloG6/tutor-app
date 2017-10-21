@@ -27,16 +27,15 @@ import java.util.ArrayList;
 class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     DatabaseReference reference = FirebaseDatabase.getInstance().
-            getReference("tutors").equalTo("uid", user.getUid()).getRef().child("appointments");
-    ArrayList<User.Appointments> users;
+            getReference("tutors").orderByChild("uid").equalTo(user.getUid()).getRef().child("appointments");
+    ArrayList<Appointments> userAppointments;
     UserAdapter()
     {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<ArrayList<User.Appointments>> t = new GenericTypeIndicator<ArrayList<User.Appointments>>();
-                if(dataSnapshot!=null)
-                    users = dataSnapshot.getValue(t);
+                Tutor tutor = dataSnapshot.getValue(Tutor.class);
+                userAppointments = tutor.appointments;
                 notifyDataSetChanged();
 
             }
@@ -56,10 +55,10 @@ class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
     @Override
 
     public void onBindViewHolder(UserAdapter.ViewHolder holder, int position) {
-        User.Appointments appointments = users.get(holder.getAdapterPosition());
+        Appointments appointments = userAppointments.get(holder.getAdapterPosition());
         holder.nameText.setText(appointments.name);
         holder.subjectText.setText(appointments.subject);
-        holder.dateText.setText(appointments.time.getMonth()+" "+appointments.time.getDay());
+       // holder.dateText.setText(appointments.time.getMonth()+" "+appointments.time.getDay());
 
 
 
@@ -67,7 +66,7 @@ class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
 
     @Override
     public int getItemCount() {
-        return users.size();
+        return userAppointments.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

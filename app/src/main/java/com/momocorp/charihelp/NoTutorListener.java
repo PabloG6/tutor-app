@@ -9,3 +9,8 @@ interface NoTutorListener {
 
     void showTutor();
 }
+
+interface NoAppointmentsListener {
+    void showNoAppointments();
+    void showAppointments();
+}

@@ -4,8 +4,7 @@ import android.animation.TimeAnimator;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.support.annotation.NonNull;
+
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,23 +15,22 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
+
 import com.google.firebase.database.ValueEventListener;
 
-import java.sql.Time;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
 
 /**
  * Created by wg13w on 10/7/2017.
@@ -44,14 +42,16 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
     NoTutorListener noTutorListener;
     Context context;
     private int iSelected;
-    User.Appointments appointment = new User.Appointments();
+   Appointments appointment = new Appointments();
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference("tutors");
 
     public TutorAdapter(Context context) {
         //instantiate list information here
         this.context = context;
+        appointment.name = LoginActivity.user.first_name+" "+LoginActivity.user.last_name;
+        appointment.uid = LoginActivity.user.uid;
         noTutorListener = (NoTutorListener) context;
-        reference.addValueEventListener(new ValueEventListener() {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot snapshot: dataSnapshot.getChildren())
@@ -149,7 +149,7 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
-                appointment.time = new Time(view.getCurrentHour(), view.getCurrentMinute(), 0);
+                appointment.time = new Appointments.Time(view.getCurrentHour(), view.getCurrentMinute());
             Date current = Calendar.getInstance().getTime();
             DatePickerDialog datePickerDialog = new DatePickerDialog(context, dateChangedListener,
                     current.getYear(), current.getMonth(), current.getDay());
@@ -162,28 +162,50 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
     private DatePickerDialog.OnDateSetListener dateChangedListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-            appointment.date = new Date(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
+            //appointment.date = new Date(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
             //push data
-            LoginActivity.user.appointments.add(appointment);
-            Map<String, Object> userAppointment = new HashMap<>();
-            userAppointment.put("appointments", appointment);
-
-
-
-            reference.child(tutorsList.get(iSelected).uid).updateChildren(userAppointment).
-                    addOnFailureListener(new OnFailureListener() {
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+            reference.child("tutors").orderByChild("uid").equalTo(tutorsList.get(iSelected).uid).
+                    addChildEventListener(new ChildEventListener() {
                         @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                           Log.i("DatabaseReference", dataSnapshot.getRef().toString());
+                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+                            ArrayList<Appointments> appointments = null;
+                            if(tutorsList.get(iSelected).appointments == null)
+                            {
+                                appointments = new ArrayList<>();
+                                appointments.add(appointment);
+
+                            } else {
+                                appointments = tutorsList.get(iSelected).appointments;
+                                appointments.add(appointment);
+                            }
+                            Map<String, ArrayList<Appointments>> appointmentsHashMap = new HashMap<>();
+                            appointmentsHashMap.put("appointments", appointments);
+                            reference.child("tutors").child(dataSnapshot.getKey()).child("appointments").setValue(appointments);
                         }
-                    }).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Toast.makeText(context, "Appointment successfully created", Toast.LENGTH_LONG).show();
-                }
-            });
 
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
         }
 
 

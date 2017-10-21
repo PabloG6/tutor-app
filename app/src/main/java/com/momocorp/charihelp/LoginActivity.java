@@ -38,6 +38,8 @@ public class LoginActivity extends AppCompatActivity {
         loginButton =(Button) findViewById(R.id.login_button);
         email = (EditText) findViewById(R.id.email_address_edit);
         password = (EditText) findViewById(R.id.password_edit);
+        email.setText("grantpablo4@gmail.com");
+        password.setText("Dragon18");
         tutorSignIn =(TextView) findViewById(R.id.sign_in_as_tutor);
         signUp =(TextView) findViewById(R.id.sign_up);
         auth = FirebaseAuth.getInstance();
@@ -66,7 +68,9 @@ public class LoginActivity extends AppCompatActivity {
                                                                  public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                                                                      Log.i("Firebase Test", dataSnapshot.getValue().toString());
                                                                      LoginActivity.user =
-                                                                             dataSnapshot.getValue(Tutor.class);
+                                                                             dataSnapshot.getValue(User.class);
+                                                                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                                                     finish();
 
                                                                  }
 
@@ -93,15 +97,13 @@ public class LoginActivity extends AppCompatActivity {
                                                                  }
                                                              });
 
-                                                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                                     finish();
                                                  }
                                              }
 
                         ).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(LoginActivity.this, "Sign up failed. Please Sign in.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, "Sign in failed. Please Sign up.", Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -131,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
                             }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(LoginActivity.this, "Sign up failed. Please sign in", Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, "Sign in failed. Please sign up", Toast.LENGTH_LONG).show();
                         }
                     });
                 }
