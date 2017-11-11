@@ -97,7 +97,12 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
             }
         });
         holder.tutorNameText.setText(tutorsList.get(holder.getAdapterPosition()).first_name + " " + tutorsList.get(holder.getAdapterPosition()).last_name);
-        holder.subjectText.setText(tutorsList.get(holder.getAdapterPosition()).subjectTaught);
+        StringBuilder subjects = new StringBuilder();
+        for(String subject: tutorsList.get(holder.getAdapterPosition()).subjectTaught)
+        {
+            subjects.append(" ").append(subject);
+        }
+        holder.subjectText.setText(subjects.toString());
         //// FIXME: 10/7/2017 fix image
 
     }
