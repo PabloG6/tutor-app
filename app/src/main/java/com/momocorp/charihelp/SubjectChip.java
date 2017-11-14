@@ -31,7 +31,7 @@ public class SubjectChip extends Chip {
     @NonNull
     @Override
     public String getTitle() {
-        return null;
+        return subjectName;
     }
 
     @Nullable

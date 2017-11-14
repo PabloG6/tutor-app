@@ -59,12 +59,15 @@
 
         />
 
-    <com.android.ex.chips.RecipientEditTextView
-        android:id="@+id/subject_taught"
+    <com.tylersuehr.chips.ChipsInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-      />
-
+        android:id="@+id/chips_input"
+        android:hint="Type your favorite subjects"
+        android:textColorHint="#757575"
+        app:detailedChipsEnabled="false"
+        app:customChipsEnabled="true"
+        app:maxRows="15"/>
 
     <Button
         android:layout_width="wrap_content"

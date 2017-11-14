@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.tylersuehr.chips.ChipsInputLayout;
 
 import java.util.ArrayList;
 
@@ -35,7 +36,7 @@ public class SignUpActivity extends AppCompatActivity {
     EditText email;
     ProgressBar progressBar;
     EditText password;
-    RecipientEditTextView subjectTaught;
+    ChipsInputLayout subjectTaught;
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseUser user = auth.getCurrentUser();
 
@@ -48,24 +49,14 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         first_name =findViewById(R.id.first_name);
         last_name = findViewById(R.id.last_name);
-        subjectTaught = findViewById(R.id.subject_taught);
+        subjectTaught = findViewById(R.id.chips_input);
 
         email = findViewById(R.id.email_edit);
         password = findViewById(R.id.password_sign_up);
         is_tutor = findViewById(R.id.is_tutor);
         progressBar = findViewById(R.id.progress_signup);
         progressBar.setVisibility(View.INVISIBLE);
-        subjectTaught.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
-        subjectTaught.setVisibility(View.INVISIBLE);
-
-        subjectTaught.setAdapter(new BaseRecipientAdapter(BaseRecipientAdapter.NO_SELECTION, this));
-        subjectTaught.setMaxChips(20);
-        subjectTaught.setChipNotCreatedListener(new RecipientEditTextView.ChipNotCreatedListener() {
-            @Override
-            public void chipNotCreated(String chipText) {
-                Log.i("Chip not created", chipText);
-            }
-        });
+        // TODO: 11/14/2017 change the kind of subjects that can be added to static 
         is_tutor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
