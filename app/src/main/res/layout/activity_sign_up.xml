@@ -60,12 +60,10 @@
         />
 
     <com.android.ex.chips.RecipientEditTextView
+        android:id="@+id/subject_taught"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/subject_taught"
-        android:inputType="text"
-        android:hint="Subjects"
-        android:imeOptions="actionNext"/>
+      />
 
 
     <Button

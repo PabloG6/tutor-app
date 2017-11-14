@@ -10,11 +10,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.ex.chips.BaseRecipientAdapter;
 import com.android.ex.chips.RecipientEditTextView;
+import com.doodle.android.chips.ChipsView;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
@@ -25,7 +28,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class SignUpActivity extends AppCompatActivity {
     EditText first_name;
@@ -36,6 +38,7 @@ public class SignUpActivity extends AppCompatActivity {
     RecipientEditTextView subjectTaught;
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseUser user = auth.getCurrentUser();
+
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
     CheckBox is_tutor;
 
@@ -43,30 +46,26 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        first_name = (EditText) findViewById(R.id.first_name);
-        last_name = (EditText) findViewById(R.id.last_name);
+        first_name =findViewById(R.id.first_name);
+        last_name = findViewById(R.id.last_name);
         subjectTaught = findViewById(R.id.subject_taught);
-        subjectTaught.setMaxChips(5);
-        subjectTaught.setTokenizer(new Rfc822Tokenizer());
-        subjectTaught.setVisibility(View.GONE);
-        email = (EditText) findViewById(R.id.email_edit);
-        password = (EditText) findViewById(R.id.password_sign_up);
-        is_tutor =(CheckBox) findViewById(R.id.is_tutor);
-        progressBar =(ProgressBar) findViewById(R.id.progress_signup);
+
+        email = findViewById(R.id.email_edit);
+        password = findViewById(R.id.password_sign_up);
+        is_tutor = findViewById(R.id.is_tutor);
+        progressBar = findViewById(R.id.progress_signup);
         progressBar.setVisibility(View.INVISIBLE);
+        subjectTaught.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+        subjectTaught.setVisibility(View.INVISIBLE);
+
+        subjectTaught.setAdapter(new BaseRecipientAdapter(BaseRecipientAdapter.NO_SELECTION, this));
+        subjectTaught.setMaxChips(20);
         subjectTaught.setChipNotCreatedListener(new RecipientEditTextView.ChipNotCreatedListener() {
             @Override
             public void chipNotCreated(String chipText) {
-                Log.i("Error", "Chip not set:"+chipText);
+                Log.i("Chip not created", chipText);
             }
         });
-        BaseRecipientAdapter adapter = new BaseRecipientAdapter(this);
-        adapter.setShowMobileOnly(true);
-        subjectTaught.setAdapter(adapter);
-        subjectTaught.dismissDropDownOnItemSelected(true);
-
-
-
         is_tutor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,24 +73,11 @@ public class SignUpActivity extends AppCompatActivity {
                 if (is_tutor.isChecked())
                     subjectTaught.setVisibility(View.VISIBLE);
                 else
-                    subjectTaught.setVisibility(View.GONE);
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    subjectTaught.setVisibility(View.INVISIBLE);
 
             }
         });
-        Button submit = (Button) findViewById(R.id.sign_up_button);
+        Button submit = findViewById(R.id.sign_up_button);
         auth.signOut();
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,8 +98,7 @@ public class SignUpActivity extends AppCompatActivity {
                                         ArrayList<String> list = new ArrayList<>();
                                         if (is_tutor.isChecked()) {
 
-                                            String subject = subjectTaught.getText().toString();
-                                            list.addAll(Arrays.asList(subject.split(" ")));
+
                                             LoginActivity.user = new Tutor(firstName, lastName,
                                                     FirebaseAuth.getInstance().getCurrentUser().getUid(), list);
 
