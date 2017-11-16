@@ -18,8 +18,8 @@ public class UserActivity extends AppCompatActivity implements NoTutorListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        noTutorsText =(TextView) findViewById(R.id.no_tutors_text);
+        recyclerView =  findViewById(R.id.recycler_view);
+        noTutorsText = findViewById(R.id.no_tutors_text);
         final TutorAdapter tutorAdapter = new TutorAdapter(this);
         recyclerView.setAdapter(tutorAdapter);
         noTutorsText.setOnClickListener(new View.OnClickListener() {
@@ -28,7 +28,7 @@ public class UserActivity extends AppCompatActivity implements NoTutorListener{
                 tutorAdapter.checkTutors();
             }
         });
-        noTutorsText.setVisibility(View.GONE);
+        noTutorsText.setVisibility(View.INVISIBLE);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 

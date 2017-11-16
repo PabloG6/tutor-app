@@ -1,6 +1,7 @@
 package com.momocorp.charihelp;
 
 import android.animation.TimeAnimator;
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -33,7 +34,7 @@ import java.util.Map;
 
 
 /**
- * Created by wg13w on 10/7/2017.
+ * Created by Pablo Grant on 10/7/2017.
  */
 
 public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> {
@@ -62,7 +63,8 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.i(TutorAdapter.TAG, "Database error");
+                Log.i(TutorAdapter.TAG, "Database error: "+databaseError.getMessage());
+
 
             }
         });
@@ -95,14 +97,18 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
             }
         });
         Tutor tutor = tutorsList.get(holder.getAdapterPosition());
+
         holder.tutorNameText.setText(tutor.first_name + " " + tutor.last_name);
-        StringBuilder subjects = new StringBuilder();
-        if (tutor.subjectTaught != null) {
-            for (String subject : tutorsList.get(holder.getAdapterPosition()).subjectTaught) {
-                subjects.append(" ").append(subject);
-            }
+         if (tutor.subjectTaught != null && tutor.subjectTaught.size() > 0) {
+             holder.subjectsTaughtRecycler.setVisibility(View.VISIBLE);
+             holder.subjectsTaughtRecycler.setAdapter(new SubjectTaughtAdapter(tutor.subjectTaught));
+            holder.subjectText.setVisibility(View.INVISIBLE);
+
+
+        } else {
+             holder.subjectsTaughtRecycler.setVisibility(View.INVISIBLE);
+            holder.subjectText.setVisibility(View.VISIBLE);
         }
-        holder.subjectText.setText(subjects.toString());
         //// FIXME: 10/7/2017 fix image
 
     }
@@ -134,18 +140,21 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
         });
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public Button scheduleButton;
-        public ImageView tutorImage;
-        public TextView tutorNameText;
-        public TextView subjectText;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        Button scheduleButton;
+        ImageView tutorImage;
+        TextView tutorNameText;
+        TextView subjectText;
+        RecyclerView subjectsTaughtRecycler;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
-            scheduleButton = (Button) itemView.findViewById(R.id.schedule_button);
-            tutorImage = (ImageView) itemView.findViewById(R.id.tutor_image);
-            tutorNameText = (TextView) itemView.findViewById(R.id.tutor_name_text);
-            subjectText = (TextView) itemView.findViewById(R.id.subject_text);
+            scheduleButton = itemView.findViewById(R.id.schedule_button);
+            tutorImage = itemView.findViewById(R.id.tutor_image);
+            tutorNameText = itemView.findViewById(R.id.tutor_name_text);
+            subjectText = itemView.findViewById(R.id.subject_text);
+            subjectsTaughtRecycler = itemView.findViewById(R.id.subject_recycler);
+
         }
     }
 
@@ -213,4 +222,43 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
 
 
     };
+
+    private static class SubjectTaughtAdapter extends RecyclerView.Adapter<SubjectTaughtAdapter.ViewHolder> {
+        ArrayList<String> subjects;
+        SubjectTaughtAdapter(ArrayList<String> subjects) {
+            this.subjects = subjects;
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chips_layout, parent, false);
+
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+        if(subjects!=null && subjects.size()!=0)
+        {
+            holder.subjectText.setText(subjects.get(holder.getAdapterPosition()));
+        }
+
+        }
+
+        @Override
+        public int getItemCount() {
+            if(subjects!=null) return subjects.size();
+            return 0;
+        }
+
+        static class ViewHolder extends RecyclerView.ViewHolder {
+            TextView subjectText;
+
+            ViewHolder(View itemView) {
+                super(itemView);
+                subjectText = itemView.findViewById(R.id.subject_text);
+
+            }
+        }
+    }
 }
