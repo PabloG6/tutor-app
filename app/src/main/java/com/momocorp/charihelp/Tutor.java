@@ -10,9 +10,9 @@ import java.util.Date;
 
 public class Tutor extends User{
 
-    public ArrayList<String> subjectTaught;
     public String isRecommended;
     public ArrayList<Appointments> appointments;
+    public ArrayList<String> subjectTaught;
 
     public Tutor()
     {

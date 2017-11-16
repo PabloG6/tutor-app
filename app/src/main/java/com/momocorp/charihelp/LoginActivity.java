@@ -38,10 +38,10 @@ public class LoginActivity extends AppCompatActivity {
         loginButton =(Button) findViewById(R.id.login_button);
         email = (EditText) findViewById(R.id.email_address_edit);
         password = (EditText) findViewById(R.id.password_edit);
-        email.setText("grantpablo4@gmail.com");
-        password.setText("Dragon18");
-        tutorSignIn =(TextView) findViewById(R.id.sign_in_as_tutor);
-        signUp =(TextView) findViewById(R.id.sign_up);
+        email.setText("test_3@email.com");
+        password.setText("Dragon");
+        tutorSignIn = findViewById(R.id.sign_in_as_tutor);
+        signUp =  findViewById(R.id.sign_up);
         auth = FirebaseAuth.getInstance();
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                      Log.i("Firebase Test", dataSnapshot.getValue().toString());
                                                                      LoginActivity.user =
                                                                              dataSnapshot.getValue(User.class);
-                                                                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                                                     startActivity(new Intent(LoginActivity.this, UserActivity.class));
                                                                      finish();
 
                                                                  }
@@ -127,7 +127,7 @@ public class LoginActivity extends AppCompatActivity {
                                         LoginActivity.user.first_name = user.getDisplayName().split(" ")[0];
                                         LoginActivity.user.last_name = user.getDisplayName().split(" ")[1];
                                         LoginActivity.user.uid = user.getUid();
-                                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                        startActivity(new Intent(LoginActivity.this, TutorActivity.class));
                                     }
                                 }
                             }).addOnFailureListener(new OnFailureListener() {

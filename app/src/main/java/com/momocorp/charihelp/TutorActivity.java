@@ -13,10 +13,10 @@ public class TutorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor);
-        tutorRecyclerView = (RecyclerView) findViewById(R.id.tutor_recycler);
-        noAppointments = (TextView) findViewById(R.id.no_appointments_text);
-        UserAdapter userAdapter = new UserAdapter();
-        tutorRecyclerView.setAdapter(userAdapter);
+        tutorRecyclerView =  findViewById(R.id.tutor_recycler);
+        noAppointments =  findViewById(R.id.no_appointments_text);
+        AppointmentsAdapter app = new AppointmentsAdapter();
+        tutorRecyclerView.setAdapter(app);
         tutorRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         //create recyclerview for tutor

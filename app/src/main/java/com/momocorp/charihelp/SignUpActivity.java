@@ -27,6 +27,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tylersuehr.chips.ChipsInputLayout;
+import com.tylersuehr.chips.data.Chip;
 
 import java.util.ArrayList;
 
@@ -56,11 +57,10 @@ public class SignUpActivity extends AppCompatActivity {
         is_tutor = findViewById(R.id.is_tutor);
         progressBar = findViewById(R.id.progress_signup);
         progressBar.setVisibility(View.INVISIBLE);
-        // TODO: 11/14/2017 change the kind of subjects that can be added to static 
+        // TODO: 11/14/2017 change the kind of subjects that can be added to static
         is_tutor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (is_tutor.isChecked())
                     subjectTaught.setVisibility(View.VISIBLE);
                 else
@@ -88,8 +88,11 @@ public class SignUpActivity extends AppCompatActivity {
                                     {
                                         ArrayList<String> list = new ArrayList<>();
                                         if (is_tutor.isChecked()) {
+                                            for (int i = 0; i < subjectTaught.getSelectedChips().size(); i++)
+                                            {
+                                               list.add(subjectTaught.getSelectedChips().get(i).getTitle());
 
-
+                                            }
                                             LoginActivity.user = new Tutor(firstName, lastName,
                                                     FirebaseAuth.getInstance().getCurrentUser().getUid(), list);
 
@@ -111,7 +114,7 @@ public class SignUpActivity extends AppCompatActivity {
                                                     UserProfileChangeRequest.Builder().setDisplayName(firstName + " " + lastName).build();
                                             user.updateProfile(profileChange);
                                             progressBar.setVisibility(View.INVISIBLE);
-                                            startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+                                            startActivity(new Intent(SignUpActivity.this, UserActivity.class));
                                         }
 
 

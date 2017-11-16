@@ -42,19 +42,19 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
     NoTutorListener noTutorListener;
     Context context;
     private int iSelected;
-   Appointments appointment = new Appointments();
+    Appointments appointment = new Appointments();
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference("tutors");
 
     public TutorAdapter(Context context) {
         //instantiate list information here
         this.context = context;
-        appointment.name = LoginActivity.user.first_name+" "+LoginActivity.user.last_name;
+        appointment.name = LoginActivity.user.first_name + " " + LoginActivity.user.last_name;
         appointment.uid = LoginActivity.user.uid;
         noTutorListener = (NoTutorListener) context;
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot: dataSnapshot.getChildren())
+                for (DataSnapshot snapshot : dataSnapshot.getChildren())
                     TutorAdapter.this.tutorsList.add(snapshot.getValue(Tutor.class));
                 notifyDataSetChanged();
 
@@ -91,16 +91,16 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
                     TutorAdapter.this.iSelected = holder.getAdapterPosition();
                     timePickerDialog.show();
 
-
-
                 }
             }
         });
-        holder.tutorNameText.setText(tutorsList.get(holder.getAdapterPosition()).first_name + " " + tutorsList.get(holder.getAdapterPosition()).last_name);
+        Tutor tutor = tutorsList.get(holder.getAdapterPosition());
+        holder.tutorNameText.setText(tutor.first_name + " " + tutor.last_name);
         StringBuilder subjects = new StringBuilder();
-        for(String subject: tutorsList.get(holder.getAdapterPosition()).subjectTaught)
-        {
-            subjects.append(" ").append(subject);
+        if (tutor.subjectTaught != null) {
+            for (String subject : tutorsList.get(holder.getAdapterPosition()).subjectTaught) {
+                subjects.append(" ").append(subject);
+            }
         }
         holder.subjectText.setText(subjects.toString());
         //// FIXME: 10/7/2017 fix image
@@ -109,8 +109,7 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        if(tutorsList.size()==0)
-        {
+        if (tutorsList.size() == 0) {
             noTutorListener.showNoTutor();
         }
 
@@ -121,7 +120,7 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot: dataSnapshot.getChildren())
+                for (DataSnapshot snapshot : dataSnapshot.getChildren())
                     TutorAdapter.this.tutorsList.add(snapshot.getValue(Tutor.class));
                 notifyDataSetChanged();
 
@@ -143,9 +142,9 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
 
         public ViewHolder(View itemView) {
             super(itemView);
-            scheduleButton =(Button) itemView.findViewById(R.id.schedule_button);
+            scheduleButton = (Button) itemView.findViewById(R.id.schedule_button);
             tutorImage = (ImageView) itemView.findViewById(R.id.tutor_image);
-            tutorNameText =(TextView) itemView.findViewById(R.id.tutor_name_text);
+            tutorNameText = (TextView) itemView.findViewById(R.id.tutor_name_text);
             subjectText = (TextView) itemView.findViewById(R.id.subject_text);
         }
     }
@@ -154,7 +153,7 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
-                appointment.time = new Appointments.Time(view.getCurrentHour(), view.getCurrentMinute());
+            appointment.time = new Appointments.Time(view.getCurrentHour(), view.getCurrentMinute());
             Date current = Calendar.getInstance().getTime();
             DatePickerDialog datePickerDialog = new DatePickerDialog(context, dateChangedListener,
                     current.getYear(), current.getMonth(), current.getDay());
@@ -174,11 +173,10 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
                     addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                           Log.i("DatabaseReference", dataSnapshot.getRef().toString());
+                            Log.i("DatabaseReference", dataSnapshot.getRef().toString());
                             DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
                             ArrayList<Appointments> appointments = null;
-                            if(tutorsList.get(iSelected).appointments == null)
-                            {
+                            if (tutorsList.get(iSelected).appointments == null) {
                                 appointments = new ArrayList<>();
                                 appointments.add(appointment);
 

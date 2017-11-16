@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class MainActivity extends AppCompatActivity implements NoTutorListener{
+public class UserActivity extends AppCompatActivity implements NoTutorListener{
     RecyclerView recyclerView;
     TextView noTutorsText;
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();

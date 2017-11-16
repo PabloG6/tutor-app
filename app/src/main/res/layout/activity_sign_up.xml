@@ -67,7 +67,8 @@
         android:textColorHint="#757575"
         app:detailedChipsEnabled="false"
         app:customChipsEnabled="true"
-        app:maxRows="15"/>
+        app:maxRows="15"
+        android:visibility="invisible"/>
 
     <Button
         android:layout_width="wrap_content"
