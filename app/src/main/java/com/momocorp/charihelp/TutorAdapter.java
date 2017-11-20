@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -37,6 +39,7 @@ import java.util.Map;
  * Created by Pablo Grant on 10/7/2017.
  */
 
+// TODO: 11/20/2017 create custom rating bar 
 public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> {
     private static final String TAG = "TUTOR_ADAPTER";
     ArrayList<Tutor> tutorsList = new ArrayList<>();
@@ -83,19 +86,7 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(final TutorAdapter.ViewHolder holder, int position) {
-        holder.scheduleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                {
-                    //send data to server to schedule appointment
 
-                    TimePickerDialog timePickerDialog = new TimePickerDialog(context, timeSetListener, 8, 0, false);
-                    TutorAdapter.this.iSelected = holder.getAdapterPosition();
-                    timePickerDialog.show();
-
-                }
-            }
-        });
         Tutor tutor = tutorsList.get(holder.getAdapterPosition());
 
         holder.tutorNameText.setText(tutor.first_name + " " + tutor.last_name);
@@ -103,7 +94,7 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
              holder.subjectsTaughtRecycler.setVisibility(View.VISIBLE);
              holder.subjectsTaughtRecycler.setAdapter(new SubjectTaughtAdapter(tutor.subjectTaught));
             holder.subjectText.setVisibility(View.INVISIBLE);
-
+            holder.ratingBar.setRating(tutor.ratings);
 
         } else {
              holder.subjectsTaughtRecycler.setVisibility(View.INVISIBLE);
@@ -141,19 +132,21 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        Button scheduleButton;
+        CardView tutorCard;
         ImageView tutorImage;
         TextView tutorNameText;
         TextView subjectText;
+        RatingBar ratingBar;
         RecyclerView subjectsTaughtRecycler;
 
         ViewHolder(View itemView) {
             super(itemView);
-            scheduleButton = itemView.findViewById(R.id.schedule_button);
-            tutorImage = itemView.findViewById(R.id.tutor_image);
+            tutorImage = itemView.findViewById(R.id.profile_image);
+            tutorCard = itemView.findViewById(R.id.tutor_card);
             tutorNameText = itemView.findViewById(R.id.tutor_name_text);
             subjectText = itemView.findViewById(R.id.subject_text);
             subjectsTaughtRecycler = itemView.findViewById(R.id.subject_recycler);
+            ratingBar = itemView.findViewById(R.id.rating_bar);
 
         }
     }

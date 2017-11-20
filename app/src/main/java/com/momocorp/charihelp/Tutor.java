@@ -13,7 +13,7 @@ public class Tutor extends User{
     public String isRecommended;
     public ArrayList<Appointments> appointments;
     public ArrayList<String> subjectTaught;
-
+    public float ratings;
     public Tutor()
     {
         super();

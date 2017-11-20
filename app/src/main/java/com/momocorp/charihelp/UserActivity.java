@@ -2,6 +2,7 @@ package com.momocorp.charihelp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.momocorp.charihelp.CustomViews.CustomItemDecoration;
 
 public class UserActivity extends AppCompatActivity implements NoTutorListener{
     RecyclerView recyclerView;
@@ -29,7 +31,12 @@ public class UserActivity extends AppCompatActivity implements NoTutorListener{
             }
         });
         noTutorsText.setVisibility(View.INVISIBLE);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager lM = new LinearLayoutManager(this);
+        DividerItemDecoration dividerItemDecoration = new
+                DividerItemDecoration(this, lM.getOrientation());
+        recyclerView.setLayoutManager(new LinearLayoutManager(this
+        ));
+        recyclerView.addItemDecoration(dividerItemDecoration);
 
 
 
@@ -43,6 +50,6 @@ public class UserActivity extends AppCompatActivity implements NoTutorListener{
 
     @Override
     public void showTutor() {
-        noTutorsText.setVisibility(View.GONE);
+        noTutorsText.setVisibility(View.INVISIBLE);
     }
 }
