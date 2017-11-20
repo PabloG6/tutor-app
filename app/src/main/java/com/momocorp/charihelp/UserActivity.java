@@ -1,5 +1,6 @@
 package com.momocorp.charihelp;
 
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -12,7 +13,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.momocorp.charihelp.CustomViews.CustomItemDecoration;
 
-public class UserActivity extends AppCompatActivity implements NoTutorListener{
+public class UserActivity extends AppCompatActivity implements NoTutorListener, DetailsFragment.OnFragmentInteractionListener{
     RecyclerView recyclerView;
     TextView noTutorsText;
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
@@ -34,8 +35,7 @@ public class UserActivity extends AppCompatActivity implements NoTutorListener{
         LinearLayoutManager lM = new LinearLayoutManager(this);
         DividerItemDecoration dividerItemDecoration = new
                 DividerItemDecoration(this, lM.getOrientation());
-        recyclerView.setLayoutManager(new LinearLayoutManager(this
-        ));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(dividerItemDecoration);
 
 
@@ -51,5 +51,10 @@ public class UserActivity extends AppCompatActivity implements NoTutorListener{
     @Override
     public void showTutor() {
         noTutorsText.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        // TODO: 11/20/2017 idk lol
     }
 }

@@ -39,14 +39,14 @@ import java.util.Map;
  * Created by Pablo Grant on 10/7/2017.
  */
 
-// TODO: 11/20/2017 create custom rating bar 
+// TODO: 11/20/2017 create custom rating bar
 public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> {
     private static final String TAG = "TUTOR_ADAPTER";
     ArrayList<Tutor> tutorsList = new ArrayList<>();
-    NoTutorListener noTutorListener;
-    Context context;
+    private NoTutorListener noTutorListener;
+    private Context context;
     private int iSelected;
-    Appointments appointment = new Appointments();
+    private Appointments appointment = new Appointments();
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference("tutors");
 
     public TutorAdapter(Context context) {
@@ -66,7 +66,7 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.i(TutorAdapter.TAG, "Database error: "+databaseError.getMessage());
+                Log.i(TutorAdapter.TAG, "Database error: " + databaseError.getMessage());
 
 
             }
@@ -90,14 +90,14 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
         Tutor tutor = tutorsList.get(holder.getAdapterPosition());
 
         holder.tutorNameText.setText(tutor.first_name + " " + tutor.last_name);
-         if (tutor.subjectTaught != null && tutor.subjectTaught.size() > 0) {
-             holder.subjectsTaughtRecycler.setVisibility(View.VISIBLE);
-             holder.subjectsTaughtRecycler.setAdapter(new SubjectTaughtAdapter(tutor.subjectTaught));
+        if (tutor.subjectTaught != null && tutor.subjectTaught.size() > 0) {
+            holder.subjectsTaughtRecycler.setVisibility(View.VISIBLE);
+            holder.subjectsTaughtRecycler.setAdapter(new SubjectTaughtAdapter(tutor.subjectTaught));
             holder.subjectText.setVisibility(View.INVISIBLE);
             holder.ratingBar.setRating(tutor.ratings);
 
         } else {
-             holder.subjectsTaughtRecycler.setVisibility(View.INVISIBLE);
+            holder.subjectsTaughtRecycler.setVisibility(View.INVISIBLE);
             holder.subjectText.setVisibility(View.VISIBLE);
         }
         //// FIXME: 10/7/2017 fix image
@@ -151,73 +151,10 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
         }
     }
 
-    private TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
-        @Override
-        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-
-            appointment.time = new Appointments.Time(view.getCurrentHour(), view.getCurrentMinute());
-            Date current = Calendar.getInstance().getTime();
-            DatePickerDialog datePickerDialog = new DatePickerDialog(context, dateChangedListener,
-                    current.getYear(), current.getMonth(), current.getDay());
-            datePickerDialog.show();
-
-
-        }
-    };
-
-    private DatePickerDialog.OnDateSetListener dateChangedListener = new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-            //appointment.date = new Date(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
-            //push data
-            DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-            reference.child("tutors").orderByChild("uid").equalTo(tutorsList.get(iSelected).uid).
-                    addChildEventListener(new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                            Log.i("DatabaseReference", dataSnapshot.getRef().toString());
-                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-                            ArrayList<Appointments> appointments = null;
-                            if (tutorsList.get(iSelected).appointments == null) {
-                                appointments = new ArrayList<>();
-                                appointments.add(appointment);
-
-                            } else {
-                                appointments = tutorsList.get(iSelected).appointments;
-                                appointments.add(appointment);
-                            }
-                            Map<String, ArrayList<Appointments>> appointmentsHashMap = new HashMap<>();
-                            appointmentsHashMap.put("appointments", appointments);
-                            reference.child("tutors").child(dataSnapshot.getKey()).child("appointments").setValue(appointments);
-                        }
-
-                        @Override
-                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                        }
-
-                        @Override
-                        public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                        }
-
-                        @Override
-                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-        }
-
-
-    };
 
     private static class SubjectTaughtAdapter extends RecyclerView.Adapter<SubjectTaughtAdapter.ViewHolder> {
         ArrayList<String> subjects;
+
         SubjectTaughtAdapter(ArrayList<String> subjects) {
             this.subjects = subjects;
         }
@@ -231,16 +168,15 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-        if(subjects!=null && subjects.size()!=0)
-        {
-            holder.subjectText.setText(subjects.get(holder.getAdapterPosition()));
-        }
+            if (subjects != null && subjects.size() != 0) {
+                holder.subjectText.setText(subjects.get(holder.getAdapterPosition()));
+            }
 
         }
 
         @Override
         public int getItemCount() {
-            if(subjects!=null) return subjects.size();
+            if (subjects != null) return subjects.size();
             return 0;
         }
 

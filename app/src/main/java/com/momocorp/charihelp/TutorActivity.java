@@ -14,6 +14,7 @@ public class TutorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor);
+
         tutorRecyclerView =  findViewById(R.id.tutor_recycler);
         noAppointments =  findViewById(R.id.no_appointments_text);
         AppointmentsAdapter app = new AppointmentsAdapter();
