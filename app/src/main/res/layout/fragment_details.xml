@@ -2,6 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="#FFFFFF"
     android:layout_height="match_parent"
     tools:context="com.momocorp.charihelp.DetailsFragment">
 
@@ -75,7 +76,7 @@
         android:id="@+id/reviews_recycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
-
+        tools:listitem="@layout/tutor_review_layout"
         app:layout_constraintBottom_toTopOf="@+id/schedule_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

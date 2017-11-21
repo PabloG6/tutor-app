@@ -2,10 +2,12 @@ package com.momocorp.charihelp;
 
 import android.animation.TimeAnimator;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -44,14 +46,19 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
     private static final String TAG = "TUTOR_ADAPTER";
     ArrayList<Tutor> tutorsList = new ArrayList<>();
     private NoTutorListener noTutorListener;
+    private DetailsFragment.OnFragmentInteractionListener showFragment;
     private Context context;
     private int iSelected;
+    AppCompatActivity activity;
+
     private Appointments appointment = new Appointments();
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference("tutors");
 
-    public TutorAdapter(Context context) {
+    public TutorAdapter(Context context, AppCompatActivity activity) {
         //instantiate list information here
         this.context = context;
+        this.activity = activity;
+        showFragment = (DetailsFragment.OnFragmentInteractionListener) context;
         appointment.name = LoginActivity.user.first_name + " " + LoginActivity.user.last_name;
         appointment.uid = LoginActivity.user.uid;
         noTutorListener = (NoTutorListener) context;
@@ -87,18 +94,30 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(final TutorAdapter.ViewHolder holder, int position) {
 
-        Tutor tutor = tutorsList.get(holder.getAdapterPosition());
+        final Tutor tutor = tutorsList.get(holder.getAdapterPosition());
+        final String name = tutor.first_name + " " + tutor.last_name;
+        holder.tutorNameText.setText(name);
+        holder.ratingBar.setRating(tutor.ratings);
+        holder.tutorCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //show details fragment
+                TutorAdapter.this.activity.getSupportFragmentManager().
+                        beginTransaction().add(R.id.container, DetailsFragment.
+                        newInstance(name, null, tutor.ratings), TAGS.DETAILS).addToBackStack(TAGS.DETAILS).commit();
+            }
+        });
 
-        holder.tutorNameText.setText(tutor.first_name + " " + tutor.last_name);
         if (tutor.subjectTaught != null && tutor.subjectTaught.size() > 0) {
             holder.subjectsTaughtRecycler.setVisibility(View.VISIBLE);
             holder.subjectsTaughtRecycler.setAdapter(new SubjectTaughtAdapter(tutor.subjectTaught));
             holder.subjectText.setVisibility(View.INVISIBLE);
-            holder.ratingBar.setRating(tutor.ratings);
+
 
         } else {
             holder.subjectsTaughtRecycler.setVisibility(View.INVISIBLE);
             holder.subjectText.setVisibility(View.VISIBLE);
+
         }
         //// FIXME: 10/7/2017 fix image
 
@@ -113,7 +132,7 @@ public class TutorAdapter extends RecyclerView.Adapter<TutorAdapter.ViewHolder> 
         return tutorsList.size();
     }
 
-    public void checkTutors() {
+     void checkTutors() {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
