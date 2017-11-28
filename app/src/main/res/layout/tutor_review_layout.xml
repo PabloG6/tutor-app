@@ -20,18 +20,10 @@
         app:layout_constraintHorizontal_bias="0.03"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginLeft="5dp" />
-
-    <com.ms.square.android.expandabletextview.ExpandableTextView
+    <at.blogc.android.views.ExpandableTextView
         android:layout_width="match_parent"
-        android:id="@+id/root_review"
-        app:maxCollapsedLines="2"
-        expandableTextView:animDuration="200"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/Blurb"
-            android:id="@+id/review_information_text"/>
+        android:layout_height="wrap_content"
+        android:text="@string/Blurb"
+        android:id="@+id/review_information_text"/>
 
-    </com.ms.square.android.expandabletextview.ExpandableTextView>
 </android.support.constraint.ConstraintLayout>
